@@ -7,8 +7,6 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 
-
-
 // Define the the application environment
 const NODE_ENV = (process.env.NODE_ENV || 'production').toLowerCase();
 const PORT = process.env.PORT || 3000;
@@ -22,11 +20,15 @@ const app = express();
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
 
+
+
 // Tell Express where to find your templates
 app.set('views', path.join(__dirname, 'src/views'));
+
 
 
 // now i add the routs for the sites 
@@ -45,6 +47,10 @@ app.get('/projects', async (req, res) => {
     res.render('projects', { title });
 });
 
+app.get('/categories', async (req, res) => {
+    const title = 'Service Project Categories';
+    res.render('categories', { title });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://127.0.0.1:${PORT}`);
