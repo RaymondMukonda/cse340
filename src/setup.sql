@@ -11,3 +11,28 @@ VALUES
 ('BrightFuture Builders', 'A nonprofit focused on improving community infrastructure through sustainable construction projects.', 'info@brightfuturebuilders.org', 'brightfuture-logo.png'),
 ('GreenHarvest Growers', 'An urban farming collective promoting food sustainability and education in local neighborhoods.', 'contact@greenharvest.org', 'greenharvest-logo.png'),
 ('UnityServe Volunteers', 'A volunteer coordination group supporting local charities and service initiatives.', 'hello@unityserve.org', 'unityserve-logo.png');
+
+
+Select * From organization;
+
+
+CREATE TABLE project (
+    project_id SERIAL PRIMARY KEY,
+    organization_id INT NOT NULL REFERENCES organization(organization_id),
+    title VARCHAR(150) NOT NULL,
+    description TEXT NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    date DATE NOT NULL
+);
+
+
+INSERT INTO project (organization_id, title, description, location, date)
+VALUES
+(1, 'Park Cleanup', 'Join us to clean up local parks and make them beautiful!', 'Central Park', '2026-06-01'),
+(1, 'Community Tutoring', 'Volunteer to tutor students in various subjects.', 'Community Center', '2026-06-10'),
+(2, 'Food Drive', 'Help collect and distribute food to those in need.', 'Town Hall', '2026-06-05'),
+(2, 'Urban Garden Build', 'Assist in building sustainable gardens.', 'GreenHarvest Plot', '2026-06-12'),
+(3, 'Charity Run', 'Support local charities with a fundraising run.', 'City Stadium', '2026-06-20');
+
+Select * From project;
+
