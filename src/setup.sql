@@ -36,3 +36,36 @@ VALUES
 
 Select * From project;
 
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL
+);
+
+
+CREATE TABLE project_category (
+    project_id INT NOT NULL REFERENCES project(project_id),
+    category_id INT NOT NULL REFERENCES category(category_id),
+    PRIMARY KEY (project_id, category_id)
+);
+
+
+INSERT INTO category (name)
+VALUES
+('Environmental'),
+('Educational'),
+('Community Service'),
+('Health and Wellness');
+
+
+INSERT INTO project_category (project_id, category_id)
+VALUES --rember the pais as you made this 
+(1, 1), -- Park Cleanup → Environmental
+(2, 2), -- Community Tutoring → Educational
+(3, 3), -- Food Drive → Community Service
+(4, 1), -- Urban Garden Build → Environmental
+(5, 4); -- Charity Run → Health and Wellness
+
+Select * From category;
+
+

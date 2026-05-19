@@ -10,39 +10,11 @@
     </section>
 
     <section class="categories-container">
-
-        <article class="category-card">
-            <h2>Environmental</h2>
-            <p>
-                Participate in projects focused on protecting the environment,
-                conserving wildlife, recycling, and promoting sustainability.
-            </p>
-        </article>
-
-        <article class="category-card">
-            <h2>Educational</h2>
-            <p>
-                Support learning initiatives through tutoring, mentoring,
-                literacy programs, and educational outreach services.
-            </p>
-        </article>
-
-        <article class="category-card">
-            <h2>Community Service</h2>
-            <p>
-                Help strengthen local communities through volunteer programs,
-                food drives, housing assistance, and public improvement projects.
-            </p>
-        </article>
-
-        <article class="category-card">
-            <h2>Health and Wellness</h2>
-            <p>
-                Contribute to projects that promote physical health, mental wellness,
-                healthcare awareness, and community support services.
-            </p>
-        </article>
-
+        <% categories.forEach(category => { %>
+            <article class="category-card">
+                <h2><%= category.name %></h2>
+            </article>
+        <% }) %>
     </section>
 </main>
 
