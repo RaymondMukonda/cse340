@@ -12,10 +12,15 @@
     <section class="categories-container">
         <% categories.forEach(category => { %>
             <article class="category-card">
-                <h2><%= category.name %></h2>
+                <h2>
+                    <a href="/category/<%= category.category_id %>">
+                        <%= category.name %>
+                    </a>
+                </h2>
             </article>
         <% }) %>
     </section>
 </main>
 
 <%- include('partials/footer') %>
+
