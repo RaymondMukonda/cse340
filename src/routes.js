@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { showHomePage } from './controllers/index.js';
-import { showOrganizationsPage } from './controllers/organizations.js';
+import { showOrganizationsPage, showOrganizationDetailsPage } from './controllers/organizations.js';
 import { showProjectsPage } from './controllers/projects.js';
 import { showCategoriesPage } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
@@ -16,5 +16,8 @@ router.get('/categories', showCategoriesPage);
 
 // Error test route
 router.get('/test-error', testErrorPage);
+
+// Route for organization details page
+router.get('/organization/:id', showOrganizationDetailsPage);
 
 export default router;
