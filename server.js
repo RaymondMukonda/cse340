@@ -1,31 +1,41 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import session from 'express-session';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
 import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
-
-
-
-
-
+import flash from './src/middleware/flash.js'; //  import flash middleware
 
 // Define the application environment
 const NODE_ENV = (process.env.NODE_ENV || 'production').toLowerCase();
 const PORT = process.env.PORT || 3000;
+const SESSION_SECRET = process.env.SESSION_SECRET; // load secret from .env
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Allow Express to receive and process common POST data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
+//  Set up session management
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+}));
+
+//  Use flash message middleware
+app.use(flash);
 
 // Middleware setup
-
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,8 +46,6 @@ app.set('view engine', 'ejs');
 // Tell Express where to find your templates
 app.set('views', path.join(__dirname, 'src/views'));
 
-
-
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
   if (NODE_ENV === 'development') {
@@ -46,18 +54,14 @@ app.use((req, res, next) => {
   next(); // Pass control to the next middleware or route
 });
 
-
-
 // Middleware to make NODE_ENV available to all templates
 app.use((req, res, next) => {
   res.locals.NODE_ENV = NODE_ENV;
   next();
 });
 
-//  Use the imported router to handle routes
+// Use the imported router to handle routes
 app.use(router);
-
-
 
 // Error handling
 
@@ -67,8 +71,6 @@ app.use((req, res, next) => {
   err.status = 404;
   next(err);
 });
-
-
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -91,13 +93,7 @@ app.use((err, req, res, next) => {
   res.status(status).render(`errors/${template}`, context);
 });
 
-
-
-
-
-
 // Start server
- 
 app.listen(PORT, async () => {
   try {
     await testConnection();

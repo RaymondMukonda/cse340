@@ -1,0 +1,9 @@
+# Normalize all text files to LF in the repo
+* text=auto
+
+# Force LF endings for source files
+*.js text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.ejs text eol=lf
+
