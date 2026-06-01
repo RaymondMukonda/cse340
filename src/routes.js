@@ -6,7 +6,9 @@ import {
     showProjectDetailsPage, 
     showNewProjectForm, 
     processNewProjectForm, 
-    projectValidation 
+    projectValidation,
+    showEditProjectForm,
+    processEditProjectForm
 } from './controllers/projects.js';
 
 import { 
@@ -67,5 +69,9 @@ router.post('/new-project', projectValidation, processNewProjectForm);
 // NEW: Routes to assign categories to a project
 router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
 router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
+
+// NEW: Routes to edit a project
+router.get('/edit-project/:id', showEditProjectForm);
+router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 
 export default router;
