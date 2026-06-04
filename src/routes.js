@@ -34,6 +34,15 @@ import {
     processEditOrganizationForm 
 } from './controllers/organizations.js';
 
+import {
+  showUserRegistrationForm,
+  processUserRegistrationForm,
+  showLoginForm,
+  processLoginForm,
+  processLogout
+} from './controllers/users.js';
+
+
 const router = express.Router();
 
 // Main routes
@@ -81,5 +90,14 @@ router.post('/project/:projectId/assign-categories', processAssignCategoriesForm
 // Routes to edit a project
 router.get('/edit-project/:id', showEditProjectForm);
 router.post('/edit-project/:id', projectValidation, processEditProjectForm);
+
+// User registration routes
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+
+// User login routes
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
 
 export default router;

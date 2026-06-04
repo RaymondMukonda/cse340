@@ -8,7 +8,7 @@ import path from 'path';
 
 import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
-import flash from './src/middleware/flash.js'; //  import flash middleware
+import flash from './src/middleware/flash.js'; // import flash middleware
 
 // Define the application environment
 const NODE_ENV = (process.env.NODE_ENV || 'production').toLowerCase();
@@ -24,7 +24,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//  Set up session management
+// Set up session management
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
@@ -32,10 +32,8 @@ app.use(session({
   cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
 }));
 
-//  Use flash message middleware
+// Use flash message middleware
 app.use(flash);
-
-// Middleware setup
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -51,11 +49,16 @@ app.use((req, res, next) => {
   if (NODE_ENV === 'development') {
     console.log(`${req.method} ${req.url}`);
   }
-  next(); // Pass control to the next middleware or route
+  next();
 });
 
-// Middleware to make NODE_ENV available to all templates
+// Middleware to make NODE_ENV and isLoggedIn available to all templates
 app.use((req, res, next) => {
+  res.locals.isLoggedIn = false;
+  if (req.session && req.session.user) {
+    res.locals.isLoggedIn = true;
+  }
+
   res.locals.NODE_ENV = NODE_ENV;
   next();
 });
@@ -74,22 +77,18 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  // Log error details for debugging
   console.error('Error occurred:', err.message);
   console.error('Stack trace:', err.stack);
 
-  // Determine status and template
   const status = err.status || 500;
   const template = status === 404 ? '404' : '500';
 
-  // Prepare data for the template
   const context = {
     title: status === 404 ? 'Page Not Found' : 'Server Error',
     error: err.message,
     stack: err.stack
   };
 
-  // Render the appropriate error template
   res.status(status).render(`errors/${template}`, context);
 });
 

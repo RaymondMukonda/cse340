@@ -57,6 +57,9 @@ body {
     border-color: #bee5eb;
 }
 
+
+
+/* General flash message style */
 .flash {
   padding: 10px;
   margin: 10px 0;
@@ -64,12 +67,14 @@ body {
   font-weight: bold;
 }
 
+/* Success message (green) */
 .flash.success {
   background-color: #d4edda;
   color: #155724;
   border: 1px solid #c3e6cb;
 }
 
+/* Error message (red) */
 .flash.error {
   background-color: #f8d7da;
   color: #721c24;
