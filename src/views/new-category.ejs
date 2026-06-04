@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<main>
+  <h1><%= title %></h1>
+
+<!-- Flash messages -->
+<% if (messages) { %>
+  <% Object.keys(messages).forEach(type => { %>
+    <% messages[type].forEach(msg => { %>
+      <div class="flash <%= type %>"><%= msg %></div>
+    <% }) %>
+  <% }) %>
+<% } %>
+
+
+  <form action="/new-category" method="POST">
+    <div class="form-group">
+      <label for="name">Category Name</label>
+      <!-- Client-side validation -->
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        required 
+        maxlength="100" 
+      />
+    </div>
+
+    <button type="submit">Create Category</button>
+  </form>
+</main>
+<%- include('partials/footer') %>

@@ -15,7 +15,11 @@ import {
     showCategoriesPage, 
     showCategoryDetailsPage, 
     showAssignCategoriesForm, 
-    processAssignCategoriesForm 
+    processAssignCategoriesForm,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm
 } from './controllers/categories.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -47,30 +51,34 @@ router.get('/organization/:id', showOrganizationDetailsPage);
 // Project details
 router.get('/project/:id', showProjectDetailsPage);
 
-// NEW: Category details
+// Category details
 router.get('/category/:id', showCategoryDetailsPage);
 
-// Route for new organization page
-router.get('/new-organization', showNewOrganizationForm);
+// NEW: Routes for new category
+router.get('/new-category', showNewCategoryForm);
+router.post('/new-category', processNewCategoryForm);
 
-// Route to handle new organization form submission
+// NEW: Routes for edit category
+router.get('/edit-category/:id', showEditCategoryForm);
+router.post('/edit-category/:id', processEditCategoryForm);
+
+// Routes for new organization
+router.get('/new-organization', showNewOrganizationForm);
 router.post('/new-organization', organizationValidation , processNewOrganizationForm);
 
-// Route to display the edit organization form
+// Routes for edit organization
 router.get('/edit-organization/:id', showEditOrganizationForm);
-
-// Route to handle the edit organization form submission
 router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 
-// NEW: Routes for new project
+// Routes for new project
 router.get('/new-project', showNewProjectForm);
 router.post('/new-project', projectValidation, processNewProjectForm);
 
-// NEW: Routes to assign categories to a project
+// Routes to assign categories to a project
 router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
 router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
 
-// NEW: Routes to edit a project
+// Routes to edit a project
 router.get('/edit-project/:id', showEditProjectForm);
 router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 

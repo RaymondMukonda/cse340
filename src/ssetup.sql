@@ -67,5 +67,3 @@ VALUES --rember the pais as you made this
 (5, 4); -- Charity Run → Health and Wellness
 
 Select * From category;
-
-
