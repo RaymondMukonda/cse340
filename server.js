@@ -52,11 +52,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware to make NODE_ENV and isLoggedIn available to all templates
+// Middleware to make NODE_ENV, isLoggedIn, and user available to all templates
 app.use((req, res, next) => {
   res.locals.isLoggedIn = false;
+  res.locals.user = null;
+
   if (req.session && req.session.user) {
     res.locals.isLoggedIn = true;
+    res.locals.user = req.session.user; // includes role_name
   }
 
   res.locals.NODE_ENV = NODE_ENV;

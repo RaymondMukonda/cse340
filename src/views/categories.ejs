@@ -1,36 +1,38 @@
 <%- include('partials/header') %>
 
 <main class="categories-page">
-    <section class="categories-hero">
-        <h1><%= title %></h1>
-        <p>
-            Explore different service project categories and discover
-            opportunities to make a positive impact in communities around the world.
-        </p>
-    </section>
+  <section class="categories-hero">
+    <h1><%= title %></h1>
+    <p>
+      Explore different service project categories and discover
+      opportunities to make a positive impact in communities around the world.
+    </p>
+  </section>
 
-    <section class="categories-container">
-        <% categories.forEach(category => { %>
-            <article class="category-card">
-                <h2>
-                    <a href="/category/<%= category.category_id %>">
-                        <%= category.name %>
-                    </a>
-                </h2>
-                <!-- NEW: Edit link -->
-                <p>
-                    <a href="/edit-category/<%= category.category_id %>">Edit Category</a>
-                </p>
-            </article>
-        <% }) %>
-    </section>
+  <section class="categories-container">
+    <% categories.forEach(category => { %>
+      <article class="category-card">
+        <h2>
+          <a href="/category/<%= category.category_id %>">
+            <%= category.name %>
+          </a>
+        </h2>
+        <% if (user && user.role_name === 'admin') { %>
+          <p>
+            <a href="/edit-category/<%= category.category_id %>">Edit Category</a>
+          </p>
+        <% } %>
+      </article>
+    <% }) %>
+  </section>
 
-    <!-- NEW: Add category link -->
+  <% if (user && user.role_name === 'admin') { %>
     <section class="add-category-link">
-        <p>
-            <a href="/new-category">Add a New Category</a>
-        </p>
+      <p>
+        <a href="/new-category">Add a New Category</a>
+      </p>
     </section>
+  <% } %>
 </main>
 
 <%- include('partials/footer') %>

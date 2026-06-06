@@ -40,7 +40,7 @@ const processLoginForm = async (req, res) => {
     const user = await authenticateUser(email, password);
 
     if (user) {
-      // Store user info in session
+      // Store user info in session (now includes role_name)
       req.session.user = user;
       req.flash('success', 'Login successful!');
 
@@ -75,13 +75,30 @@ const processLogout = (req, res) => {
   });
 };
 
-// Middleware to protect routes
+// Middleware to protect routes (login required)
 const requireLogin = (req, res, next) => {
   if (!req.session || !req.session.user) {
     req.flash('error', 'You must be logged in to access that page.');
     return res.redirect('/login');
   }
   next();
+};
+
+// Middleware factory to require specific role
+const requireRole = (role) => {
+  return (req, res, next) => {
+    if (!req.session || !req.session.user) {
+      req.flash('error', 'You must be logged in to access this page.');
+      return res.redirect('/login');
+    }
+
+    if (req.session.user.role_name !== role) {
+      req.flash('error', 'You do not have permission to access this page.');
+      return res.redirect('/');
+    }
+
+    next();
+  };
 };
 
 // Show dashboard
@@ -101,5 +118,6 @@ export {
   processLoginForm,
   processLogout,
   requireLogin,
+  requireRole,
   showDashboard
 };

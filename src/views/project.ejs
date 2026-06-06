@@ -1,45 +1,25 @@
 <%- include('partials/header') %>
 
 <main>
-    <h1><%= title %></h1>
-    <p><strong>Date:</strong> <%= project.date.toDateString() %></p>
-    <p><strong>Location:</strong> <%= project.location %></p>
-    <p><strong>Description:</strong> <%= project.description %></p>
+  <h1><%= title %></h1>
 
-    <p>
-        <strong>Organization:</strong>
-        <a href="/organization/<%= project.organization_id %>">
-            <%= project.organization_name %>
-        </a>
-    </p>
+  <h2><%= project.title %></h2>
+  <p>Date: <%= project.date %></p>
+  <p>Location: <%= project.location %></p>
+  <p>Description: <%= project.description %></p>
+  <p>Organization: <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></p>
 
-    <!--  Category tags -->
-    <section>
-        <h3>Categories:</h3>
-        <ul>
-            <% categories.forEach(category => { %>
-                <li>
-                    <a href="/category/<%= category.category_id %>">
-                        <%= category.name %>
-                    </a>
-                </li>
-            <% }) %>
-        </ul>
+  <h3>Category tags</h3>
+  <ul>
+    <% categories.forEach(category => { %>
+      <li><a href="/category/<%= category.category_id %>"><%= category.name %></a></li>
+    <% }) %>
+  </ul>
 
-        <!-- Link to assign categories -->
-        <p>
-            <a href="/project/<%= project.project_id %>/assign-categories">
-                Edit Categories
-            </a>
-        </p>
-
-        <!-- NEW: Link to edit project -->
-        <p>
-            <a href="/edit-project/<%= project.project_id %>">
-                Edit Project
-            </a>
-        </p>
-    </section>
+  <% if (user && user.role_name === 'admin') { %>
+    <a href="/project/<%= project.project_id %>/assign-categories">Assign Categories</a>
+    <a href="/edit-project/<%= project.project_id %>">Edit Project</a>
+  <% } %>
 </main>
 
 <%- include('partials/footer') %>
