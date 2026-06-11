@@ -2,7 +2,10 @@ import {
   getUpcomingProjects, 
   getProjectDetails, 
   createProject, 
-  updateProject 
+  updateProject,
+  addVolunteer,
+  removeVolunteer,
+  getUserVolunteers
 } from '../models/projects.js';
 
 import { getCategoriesByProjectId } from '../models/categories.js';
@@ -28,8 +31,20 @@ const showProjectDetailsPage = async (req, res) => {
     return res.status(404).send('Project not found');
   }
 
+  let isVolunteering = false;
+  if (req.session.user) {
+    const volunteers = await getUserVolunteers(req.session.user.user_id);
+    isVolunteering = volunteers.some(v => v.project_id == projectId);
+  }
+
   const title = project.title;
-  res.render('project', { title, project, categories });
+  res.render('project', { 
+    title, 
+    project, 
+    categories, 
+    isVolunteering, 
+    user: req.session.user 
+  });
 };
 
 // Show new project form
@@ -84,7 +99,7 @@ const processNewProjectForm = async (req, res) => {
   }
 };
 
-// NEW: Show edit project form
+// Show edit project form
 const showEditProjectForm = async (req, res) => {
   const projectId = req.params.id;
   const project = await getProjectDetails(projectId);
@@ -98,7 +113,7 @@ const showEditProjectForm = async (req, res) => {
   res.render('edit-project', { title, project, organizations, messages: req.flash() });
 };
 
-// NEW: Process edit project form
+// Process edit project form
 const processEditProjectForm = async (req, res) => {
   const projectId = req.params.id;
   const { title, description, location, date, organizationId } = req.body;
@@ -122,6 +137,71 @@ const processEditProjectForm = async (req, res) => {
   }
 };
 
+
+  //  Volunteer Controllers
+
+
+// Add volunteer
+const volunteerForProject = async (req, res) => {
+  if (!req.session.user) {
+    req.flash('error', 'You must be logged in to volunteer.');
+    return res.redirect(`/project/${req.params.id}`);
+  }
+
+  try {
+    await addVolunteer(req.params.id, req.session.user.user_id);
+    req.flash('success', 'You are now volunteering for this project!');
+    res.redirect(`/project/${req.params.id}`);
+  } catch (error) {
+    console.error('Error volunteering:', error);
+    req.flash('error', 'Could not volunteer for project.');
+    res.redirect(`/project/${req.params.id}`);
+  }
+};
+
+// Remove volunteer
+const removeVolunteerFromProject = async (req, res) => {
+  if (!req.session.user) {
+    req.flash('error', 'You must be logged in to remove volunteering.');
+    return res.redirect(`/project/${req.params.id}`);
+  }
+
+  try {
+    await removeVolunteer(req.params.id, req.session.user.user_id);
+    req.flash('success', 'You are no longer volunteering for this project.');
+    res.redirect(`/project/${req.params.id}`);
+  } catch (error) {
+    console.error('Error removing volunteer:', error);
+    req.flash('error', 'Could not remove volunteering.');
+    res.redirect(`/project/${req.params.id}`);
+  }
+};
+
+// Show dashboard with volunteered projects
+const showDashboard = async (req, res) => {
+  if (!req.session.user) {
+    req.flash('error', 'You must be logged in to view your dashboard.');
+    return res.redirect('/login');
+  }
+
+  try {
+    const projects = await getUserVolunteers(req.session.user.user_id);
+    const title = 'My Dashboard';
+    res.render('dashboard', { 
+      title, 
+      projects, 
+      user: req.session.user,   // <-- pass user object
+      name: req.session.user.name,  // <-- pass name
+      email: req.session.user.email, // <-- pass email
+      messages: req.flash() 
+    });
+  } catch (error) {
+    console.error('Error loading dashboard:', error);
+    req.flash('error', 'Could not load dashboard.');
+    res.redirect('/');
+  }
+};
+
 export { 
   showProjectsPage, 
   showProjectDetailsPage, 
@@ -129,5 +209,8 @@ export {
   processNewProjectForm, 
   projectValidation,
   showEditProjectForm,
-  processEditProjectForm
+  processEditProjectForm,
+  volunteerForProject,
+  removeVolunteerFromProject,
+  showDashboard
 };

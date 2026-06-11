@@ -8,7 +8,10 @@ import {
     processNewProjectForm, 
     projectValidation,
     showEditProjectForm,
-    processEditProjectForm
+    processEditProjectForm,
+    volunteerForProject,
+    removeVolunteerFromProject,
+    showDashboard
 } from './controllers/projects.js';
 
 import { 
@@ -42,7 +45,6 @@ import {
   processLogout,
   requireLogin,
   requireRole,
-  showDashboard,
   showUsersPage
 } from './controllers/users.js';
 
@@ -62,6 +64,10 @@ router.get('/organization/:id', showOrganizationDetailsPage);
 
 // Project details
 router.get('/project/:id', showProjectDetailsPage);
+
+// Volunteer routes (protected)
+router.post('/project/:id/volunteer', requireLogin, volunteerForProject);
+router.post('/project/:id/unvolunteer', requireLogin, removeVolunteerFromProject);
 
 // Category details
 router.get('/category/:id', showCategoryDetailsPage);

@@ -10,7 +10,24 @@
   <% if (user && user.role_name === 'admin') { %>
     <p><a href="/users">View All Users</a></p>
   <% } %>
+
+  <!-- Volunteer projects list -->
+  <h3>My Volunteer Projects</h3>
+  <% if (projects && projects.length > 0) { %>
+    <ul>
+      <% projects.forEach(project => { %>
+        <li>
+          <strong><%= project.title %></strong> 
+          (<%= project.date %> at <%= project.location %>, <%= project.organization_name %>)
+          <form action="/project/<%= project.project_id %>/unvolunteer" method="POST" style="display:inline;">
+            <button type="submit">Remove</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>You have not volunteered for any projects yet.</p>
+  <% } %>
 </main>
 
 <%- include('partials/footer') %>
-

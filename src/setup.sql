@@ -108,7 +108,37 @@ JOIN roles r ON u.role_id = r.role_id;
 DELETE FROM users WHERE email = 'test@example.com';
 
 
+SELECT * FROM users;
+SELECT * FROM roles;
 
+UPDATE users 
+SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') 
+WHERE email = 'admin@example.com';
+
+SELECT u.user_id, u.email, r.role_name 
+FROM users u 
+JOIN roles r ON u.role_id = r.role_id;
+
+--admin role
+
+
+UPDATE users
+SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin')
+WHERE email = 'admin@example.com';
+
+-- check all roles
+SELECT user_id, email, role_id
+FROM users;
+
+-- Track which users have volunteered for which projects
+CREATE TABLE project_volunteers (
+    project_id INT NOT NULL REFERENCES project(project_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    volunteered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (project_id, user_id)
+);
+
+SELECT * FROM project_volunteers;
 
 
 
